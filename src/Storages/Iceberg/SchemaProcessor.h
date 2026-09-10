@@ -76,6 +76,10 @@ public:
     std::optional<NameAndTypePair> tryGetFieldCharacteristics(Int32 schema_version, Int32 source_id) const;
     NamesAndTypesList tryGetFieldsCharacteristics(Int32 schema_id, const std::vector<Int32> & source_ids) const;
 
+    /// Field id of every field of the schema's `fields` array, nested ones included, keyed by dotted path
+    /// (t.x, arr.element, m.key, m.value). Same as ClickHouse; the Parquet encoder expects these paths.
+    static std::unordered_map<String, Int64> traverseSchema(Poco::JSON::Array::Ptr schema);
+
 private:
     std::unordered_map<Int32, Poco::JSON::Object::Ptr> iceberg_table_schemas_by_ids;
     std::unordered_map<Int32, std::shared_ptr<NamesAndTypesList>> timeplus_table_schemas_by_ids;
